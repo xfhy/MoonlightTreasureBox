@@ -29,51 +29,52 @@ public class SampleManagerImpl implements ISamplerManager {
     private int latchCount = 2;
     private long baseTime;
     private String msgId;
-    private final SamplerListenerChain samplerListenerChain  = new SamplerListenerChain();
+    private final SamplerListenerChain samplerListenerChain = new SamplerListenerChain();
+
     private SampleManagerImpl() {
         AbsSampler cpuSample = new CpuSample();
-        cpuSample.setSampleListener( new AbsSampler.SampleListener() {
+        cpuSample.setSampleListener(new AbsSampler.SampleListener() {
             @Override
             public void onSampleEnd(String msgId, String msg) {
                 AppExecutors.getInstance().diskIO().execute(new Runnable() {
                     @Override
                     public void run() {
-                        samplerListenerChain.onCpuSample( baseTime,msgId,msg );
-                        Log.d(TAG,"cpu sample end "+latch.getCount());
+                        samplerListenerChain.onCpuSample(baseTime, msgId, msg);
+                        Log.d(TAG, "cpu sample end " + latch.getCount());
                         latch.countDown();
                     }
                 });
 
             }
-        } );
-        anrSample.add( cpuSample );
+        });
+        anrSample.add(cpuSample);
 
-        latchCount ++;
-        AbsSampler stackSample = new StackSampler( Thread.currentThread() );
-        stackSample.setSampleListener( new AbsSampler.SampleListener() {
+        latchCount++;
+        AbsSampler stackSample = new StackSampler(Thread.currentThread());
+        stackSample.setSampleListener(new AbsSampler.SampleListener() {
             @Override
             public void onSampleEnd(String msgId, String msg) {
                 AppExecutors.getInstance().diskIO().execute(new Runnable() {
                     @Override
                     public void run() {
-                        samplerListenerChain.onMainThreadStackSample( baseTime,msgId,msg );
-                        Log.d(TAG,"main thread stack sample end "+latch.getCount());
+                        samplerListenerChain.onMainThreadStackSample(baseTime, msgId, msg);
+                        Log.d(TAG, "main thread stack sample end " + latch.getCount());
                         latch.countDown();
                     }
                 });
             }
-        } );
-        anrSample.add( stackSample );
-        latchCount ++;
+        });
+        anrSample.add(stackSample);
+        latchCount++;
     }
 
     @Override
     public void startAnrSample(String msgId, long baseTime) {
-        if(inSample.get()){
-            Log.d(TAG,"startAnrSample return ");
+        if (inSample.get()) {
+            Log.d(TAG, "startAnrSample return ");
             return;
         }
-        Log.d(TAG,"startAnrSample ");
+        Log.d(TAG, "startAnrSample ");
         inSample.set(true);
         createLatch();
         AppExecutors.getInstance().networkIO().execute(new Runnable() {
@@ -81,12 +82,12 @@ public class SampleManagerImpl implements ISamplerManager {
             public void run() {
                 SampleManagerImpl.this.baseTime = baseTime;
                 SampleManagerImpl.this.msgId = msgId;
-                for (AbsSampler sampler : anrSample){
-                    sampler.startSample( msgId,true );
+                for (AbsSampler sampler : anrSample) {
+                    sampler.startSample(msgId, true);
                 }
                 //获取当前消息队列的情况
-                Looper.getMainLooper().dump( new MessageQueuePrint() ,"" );
-                Log.d(TAG,"MessageQueue sample end "+latch.getCount());
+                Looper.getMainLooper().dump(new MessageQueuePrint(), "");
+                Log.d(TAG, "MessageQueue sample end " + latch.getCount());
                 latch.countDown();
             }
 
@@ -94,23 +95,23 @@ public class SampleManagerImpl implements ISamplerManager {
     }
 
     private void dispatchMessage() {
-        Log.d(TAG,"dispatchMessage");
+        Log.d(TAG, "dispatchMessage");
         latch = null;
         samplerListenerChain.messageQueueDispatchAnrFinish();
         inSample.set(false);
     }
 
-    private void createLatch(){
-        if(latch == null){
-            synchronized (SampleManagerImpl.class){
-                if(latch == null){
+    private void createLatch() {
+        if (latch == null) {
+            synchronized (SampleManagerImpl.class) {
+                if (latch == null) {
                     latch = new CountDownLatch(latchCount);
                     AppExecutors.getInstance().networkIO().execute(new Runnable() {
                         @Override
                         public void run() {
                             try {
                                 latch.await();
-                                Log.d(TAG,"createLatch  dispatchMessage");
+                                Log.d(TAG, "createLatch  dispatchMessage");
                                 dispatchMessage();
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
@@ -124,11 +125,11 @@ public class SampleManagerImpl implements ISamplerManager {
 
     @Override
     public void messageQueueDispatchAnrFinish() {
-        if(latch != null){
-            Log.d(TAG,"looper handle end "+latch.getCount());
+        if (latch != null) {
+            Log.d(TAG, "looper handle end " + latch.getCount());
             latch.countDown();
-        }else {
-            Log.e(TAG,"messageQueueDispatchAnrFinish but latch is null inSample is "+inSample.get());
+        } else {
+            Log.e(TAG, "messageQueueDispatchAnrFinish but latch is null inSample is " + inSample.get());
             dispatchMessage();
         }
     }
@@ -153,39 +154,39 @@ public class SampleManagerImpl implements ISamplerManager {
         anrSample.add(sampler);
     }
 
-    public static SampleManagerImpl getInstance(){
+    public static SampleManagerImpl getInstance() {
         return SampleManagerImplHolder.impl;
     }
 
     @Override
     public void onConfigChange(BlockBoxConfig config) {
         samplerListenerChain.clearListener();
-        samplerListenerChain.addSampleListener( config.getAnrSamplerListeners() );
+        samplerListenerChain.addSampleListener(config.getAnrSamplerListeners());
     }
 
     @Override
     public void onScheduledSample(boolean start, long baseTime, String msgId, long dealt) {
-        samplerListenerChain.onScheduledSample( start, baseTime, msgId, dealt );
+        samplerListenerChain.onScheduledSample(start, baseTime, msgId, dealt);
     }
 
     @Override
     public void onMsgSample(long baseTime, String msgId, MessageInfo msg) {
-        samplerListenerChain.onMsgSample( baseTime, msgId, msg );
+        samplerListenerChain.onMsgSample(baseTime, msgId, msg);
     }
 
     @Override
     public void onJankSample(String msgId, MessageInfo msg) {
-        samplerListenerChain.onJankSample( msgId,msg );
+        samplerListenerChain.onJankSample(msgId, msg);
     }
 
-    private static class SampleManagerImplHolder{
+    private static class SampleManagerImplHolder {
         private final static SampleManagerImpl impl = new SampleManagerImpl();
     }
 
-    private class MessageQueuePrint implements Printer{
+    private class MessageQueuePrint implements Printer {
         @Override
         public void println(String x) {
-            samplerListenerChain.onMessageQueueSample( baseTime,msgId,x );
+            samplerListenerChain.onMessageQueueSample(baseTime, msgId, x);
         }
     }
 }

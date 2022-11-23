@@ -14,20 +14,21 @@ import com.txl.blockmoonlighttreasurebox.block.SystemAnrMonitor;
 
 public class TestApplication extends Application {
     private final String TAG = TestApplication.class.getSimpleName();
+
     @Override
     public void onCreate() {
         super.onCreate();
         int pid = Process.myPid();
         String processName = "";
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningAppProcessInfo process: manager.getRunningAppProcesses()) {
-            if(process.pid == pid)
-            {
+        for (ActivityManager.RunningAppProcessInfo process : manager.getRunningAppProcesses()) {
+            if (process.pid == pid) {
                 processName = process.processName;
             }
         }
-        if(processName.equals(getPackageName())){
-            Log.d(TAG,"init BlockMonitor");
+        if (processName.equals(getPackageName())) {
+            //主进程
+            Log.d(TAG, "init BlockMonitor");
             BlockMonitorFace.init(this)
                     .updateConfig(new BlockBoxConfig.Builder()
                             .useAnalyze(true)

@@ -17,6 +17,7 @@
         android:layout_height="wrap_content"
         android:text="消息类型"
         android:gravity="center" />
+
     <TextView
         android:id="@+id/tvMsgId"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,6 +27,7 @@
         android:layout_height="wrap_content"
         android:text="消息id"
         android:gravity="center" />
+
     <TextView
         android:id="@+id/tvWallTime"
         android:layout_width="wrap_content"
@@ -33,7 +35,8 @@
         app:layout_constraintTop_toBottomOf="@+id/tvMsgId"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:text="wall:300ms"/>
+        android:text="wall:300ms" />
+
     <TextView
         android:id="@+id/tvCpuTime"
         android:layout_width="wrap_content"
@@ -41,7 +44,8 @@
         app:layout_constraintTop_toBottomOf="@+id/tvWallTime"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:text="cpu:300ms"/>
+        android:text="cpu:300ms" />
+
     <TextView
         android:id="@+id/tvMsgCount"
         android:layout_width="wrap_content"
@@ -49,6 +53,6 @@
         app:layout_constraintTop_toBottomOf="@+id/tvCpuTime"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:text="msgCount:50"/>
+        android:text="msgCount:50" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

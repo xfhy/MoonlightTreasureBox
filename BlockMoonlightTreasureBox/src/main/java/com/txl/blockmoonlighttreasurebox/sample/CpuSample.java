@@ -17,7 +17,7 @@ import java.util.Map;
  * date：2021/10/16
  * description：
  */
-public class CpuSample extends AbsSampler{
+public class CpuSample extends AbsSampler {
     private static final int BUFFER_SIZE = 1024;
 
     private int mPid = 0;
@@ -82,8 +82,8 @@ public class CpuSample extends AbsSampler{
             } catch (IOException exception) {
                 Log.e(TAG, "doSample: ", exception);
             }
-            if(needListener && mSampleListener != null){
-                mSampleListener.onSampleEnd(msgId, result );
+            if (needListener && mSampleListener != null) {
+                mSampleListener.onSampleEnd(msgId, result);
             }
         }
     }

@@ -13,7 +13,7 @@
         <activity
             android:name=".AnrTestActivity"
             android:exported="true"
-            android:process=":anr.service"/>
+            android:process=":anr.service" />
 
         <service
             android:name=".AnrService"

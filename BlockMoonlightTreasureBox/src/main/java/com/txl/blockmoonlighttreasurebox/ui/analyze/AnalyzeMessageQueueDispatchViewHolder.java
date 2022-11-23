@@ -10,7 +10,7 @@ import com.txl.blockmoonlighttreasurebox.R;
 import com.txl.blockmoonlighttreasurebox.info.MessageInfo;
 
 public class AnalyzeMessageQueueDispatchViewHolder extends RecyclerView.ViewHolder {
-    private TextView tvMsgType, tvMsgId,tvWallTime, tvCpuTime, tvMsgCount;
+    private TextView tvMsgType, tvMsgId, tvWallTime, tvCpuTime, tvMsgCount;
 
     public AnalyzeMessageQueueDispatchViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -24,18 +24,18 @@ public class AnalyzeMessageQueueDispatchViewHolder extends RecyclerView.ViewHold
     public void parse(MessageInfo messageInfo) {
         itemView.setBackgroundResource(getItemBg(messageInfo));
         tvMsgId.setText("msgId: ");
-        if(messageInfo.boxMessages != null && messageInfo.boxMessages.size() != 0){
-            if(messageInfo.boxMessages.get(0) != null){
-                tvMsgId.setText("msgId: "+messageInfo.boxMessages.get(0).getMsgId());
-            }else {
+        if (messageInfo.boxMessages != null && messageInfo.boxMessages.size() != 0) {
+            if (messageInfo.boxMessages.get(0) != null) {
+                tvMsgId.setText("msgId: " + messageInfo.boxMessages.get(0).getMsgId());
+            } else {
                 tvMsgId.setText("msgId: ");
             }
 
         }
-        tvMsgType.setText("消息类型："+MessageInfo.msgTypeToString(messageInfo.msgType));
-        tvWallTime.setText("wall: "+messageInfo.wallTime);
-        tvCpuTime.setText("cpu: "+messageInfo.cpuTime);
-        tvMsgCount.setText("msgCount: "+messageInfo.count);
+        tvMsgType.setText("消息类型：" + MessageInfo.msgTypeToString(messageInfo.msgType));
+        tvWallTime.setText("wall: " + messageInfo.wallTime);
+        tvCpuTime.setText("cpu: " + messageInfo.cpuTime);
+        tvMsgCount.setText("msgCount: " + messageInfo.count);
     }
 
     private int getItemBg(MessageInfo messageInfo) {

@@ -23,7 +23,7 @@ public interface IMainThreadSampleListener {
 
     /**
      * 消息队列中发生anr的消息已经处理完毕
-     * */
+     */
     void messageQueueDispatchAnrFinish();
 
 

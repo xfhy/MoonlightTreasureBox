@@ -3,7 +3,7 @@ package com.txl.blockmoonlighttreasurebox.utils;
 import java.lang.reflect.Field;
 
 public class ReflectUtils {
-    public static long reflectLongField(Object o,Class c, String fileName,long defaultValue){
+    public static long reflectLongField(Object o, Class c, String fileName, long defaultValue) {
         try {
             Field file = c.getDeclaredField(fileName);
             file.setAccessible(true);
@@ -14,7 +14,7 @@ public class ReflectUtils {
         return defaultValue;
     }
 
-    public static Object reflectFiled(Object o,Class c,String fieldName){
+    public static Object reflectFiled(Object o, Class c, String fieldName) {
         try {
             Field file = c.getDeclaredField(fieldName);
             file.setAccessible(true);

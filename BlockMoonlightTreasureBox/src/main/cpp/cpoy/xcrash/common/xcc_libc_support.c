@@ -25,13 +25,12 @@
 #include "xcc_libc_support.h"
 #include "xcc_errno.h"
 
-void *xcc_libc_support_memset(void *s, int c, size_t n)
-{
-    char *p = (char *)s;
-    
-    while(n--)
-        *p++ = (char)c;
-    
+void *xcc_libc_support_memset(void *s, int c, size_t n) {
+    char *p = (char *) s;
+
+    while (n--)
+        *p++ = (char) c;
+
     return s;
 }
 
@@ -45,42 +44,39 @@ void *xcc_libc_support_memset(void *s, int c, size_t n)
 #define XCC_LIC_SUPPORT_LEAPS_THRU_END_OF(y) (XCC_LIC_SUPPORT_DIV(y, 4) - XCC_LIC_SUPPORT_DIV(y, 100) + XCC_LIC_SUPPORT_DIV(y, 400))
 
 static const unsigned short int xcc_libc_support_mon_yday[2][13] =
-{
-    /* Normal years.  */
-    { 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365 },
-    /* Leap years.  */
-    { 0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335, 366 }
-};
+        {
+                /* Normal years.  */
+                {0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365},
+                /* Leap years.  */
+                {0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335, 366}
+        };
 
 /* Compute the `struct tm' representation of *T,
    offset GMTOFF seconds east of UTC,
    and store year, yday, mon, mday, wday, hour, min, sec into *RESULT.
    Return RESULT if successful.  */
-struct tm *xcc_libc_support_localtime_r(const time_t *timep, long gmtoff, struct tm *result)
-{
+struct tm *xcc_libc_support_localtime_r(const time_t *timep, long gmtoff, struct tm *result) {
     time_t days, rem, y;
     const unsigned short int *ip;
 
-    if(NULL == result) return NULL;
+    if (NULL == result) return NULL;
 
     result->tm_gmtoff = gmtoff;
 
     days = ((*timep) / XCC_LIC_SUPPORT_SECS_PER_DAY);
     rem = ((*timep) % XCC_LIC_SUPPORT_SECS_PER_DAY);
     rem += gmtoff;
-    while (rem < 0)
-    {
+    while (rem < 0) {
         rem += XCC_LIC_SUPPORT_SECS_PER_DAY;
         --days;
     }
-    while (rem >= XCC_LIC_SUPPORT_SECS_PER_DAY)
-    {
+    while (rem >= XCC_LIC_SUPPORT_SECS_PER_DAY) {
         rem -= XCC_LIC_SUPPORT_SECS_PER_DAY;
         ++days;
     }
-    result->tm_hour = (int)(rem / XCC_LIC_SUPPORT_SECS_PER_HOUR);
+    result->tm_hour = (int) (rem / XCC_LIC_SUPPORT_SECS_PER_HOUR);
     rem %= XCC_LIC_SUPPORT_SECS_PER_HOUR;
-    result->tm_min = (int)(rem / 60);
+    result->tm_min = (int) (rem / 60);
     result->tm_sec = rem % 60;
     /* January 1, 1970 was a Thursday.  */
     result->tm_wday = (4 + days) % 7;
@@ -88,8 +84,7 @@ struct tm *xcc_libc_support_localtime_r(const time_t *timep, long gmtoff, struct
         result->tm_wday += 7;
     y = 1970;
 
-    while (days < 0 || days >= (XCC_LIC_SUPPORT_ISLEAP(y) ? 366 : 365))
-    {
+    while (days < 0 || days >= (XCC_LIC_SUPPORT_ISLEAP(y) ? 366 : 365)) {
         /* Guess a corrected year, assuming 365 days per year.  */
         time_t yg = y + days / 365 - (days % 365 < 0);
 
@@ -100,20 +95,19 @@ struct tm *xcc_libc_support_localtime_r(const time_t *timep, long gmtoff, struct
 
         y = yg;
     }
-    result->tm_year = (int)(y - 1900);
-    if (result->tm_year != y - 1900)
-    {
+    result->tm_year = (int) (y - 1900);
+    if (result->tm_year != y - 1900) {
         /* The year cannot be represented due to overflow.  */
         errno = EOVERFLOW;
         return NULL;
     }
-    result->tm_yday = (int)days;
+    result->tm_yday = (int) days;
     ip = xcc_libc_support_mon_yday[XCC_LIC_SUPPORT_ISLEAP(y)];
     for (y = 11; days < (long int) ip[y]; --y)
         continue;
     days -= ip[y];
-    result->tm_mon = (int)y;
-    result->tm_mday = (int)(days + 1);
+    result->tm_mon = (int) y;
+    result->tm_mday = (int) (days + 1);
     return result;
 }
 

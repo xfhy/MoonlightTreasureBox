@@ -13,7 +13,7 @@ public class SamplerFactory {
         throw new RuntimeException("SamplerFactory can not call this construction method");
     }
 
-    public static ISamplerManager createSampleManager(){
+    public static ISamplerManager createSampleManager() {
         return SampleManagerImpl.getInstance();
     }
 }

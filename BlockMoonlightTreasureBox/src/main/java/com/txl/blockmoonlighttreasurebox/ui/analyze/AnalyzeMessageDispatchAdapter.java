@@ -23,7 +23,7 @@ public class AnalyzeMessageDispatchAdapter extends RecyclerView.Adapter<AnalyzeM
     @NonNull
     @Override
     public AnalyzeMessageQueueDispatchViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        return new AnalyzeMessageQueueDispatchViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_analyze_message_dispatch,viewGroup,false));
+        return new AnalyzeMessageQueueDispatchViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_analyze_message_dispatch, viewGroup, false));
     }
 
     @Override
@@ -32,7 +32,7 @@ public class AnalyzeMessageDispatchAdapter extends RecyclerView.Adapter<AnalyzeM
         analyzeMessageQueueDispatchViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(onItemClickListener != null){
+                if (onItemClickListener != null) {
                     onItemClickListener.onItemClick(messageInfos.get(index));
                 }
             }
@@ -44,7 +44,8 @@ public class AnalyzeMessageDispatchAdapter extends RecyclerView.Adapter<AnalyzeM
     public int getItemCount() {
         return messageInfos == null ? 0 : messageInfos.size();
     }
-    public interface OnItemClickListener{
+
+    public interface OnItemClickListener {
         void onItemClick(MessageInfo messageInfo);
     }
 }

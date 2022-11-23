@@ -10,7 +10,7 @@
         <activity
             android:name=".ui.analyze.AnalyzeActivity"
             android:exported="false"
-            android:label="@string/log_analyze"/>
+            android:label="@string/log_analyze" />
         <activity
             android:name=".ui.DisplayActivity"
             android:enabled="true"

@@ -17,7 +17,7 @@ public class AnalyzeSchedulingAdapter extends RecyclerView.Adapter<AnalyzeSchedu
     @NonNull
     @Override
     public AnalyzeSchedulingViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        return new AnalyzeSchedulingViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_analyze_scheduling,viewGroup,false));
+        return new AnalyzeSchedulingViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_analyze_scheduling, viewGroup, false));
     }
 
     @Override
@@ -27,6 +27,6 @@ public class AnalyzeSchedulingAdapter extends RecyclerView.Adapter<AnalyzeSchedu
 
     @Override
     public int getItemCount() {
-        return scheduledInfos==null?0:scheduledInfos.size();
+        return scheduledInfos == null ? 0 : scheduledInfos.size();
     }
 }

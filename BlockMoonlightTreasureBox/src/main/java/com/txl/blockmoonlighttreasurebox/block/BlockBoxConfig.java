@@ -55,13 +55,13 @@ public class BlockBoxConfig {
     }
 
 
-
-    public static class Builder{
+    public static class Builder {
         private final BlockBoxConfig config;
-        public Builder(){
+
+        public Builder() {
             config = new BlockBoxConfig();
             FileSample fileSample = FileSample.instance;
-            config.anrSamplerListeners.add( fileSample );
+            config.anrSamplerListeners.add(fileSample);
         }
 
         public Builder setWarnTime(long warnTime) {
@@ -85,26 +85,26 @@ public class BlockBoxConfig {
         }
 
         public Builder addAnrSampleListener(IAnrSamplerListener anrSamplerListener) {
-            config.anrSamplerListeners.add( anrSamplerListener );
+            config.anrSamplerListeners.add(anrSamplerListener);
             return this;
         }
 
         public Builder addFirstAnrSampleListener(IAnrSamplerListener anrSamplerListener) {
-            config.anrSamplerListeners.add( anrSamplerListener );
+            config.anrSamplerListeners.add(anrSamplerListener);
             return this;
         }
 
-        public Builder useAnalyze(boolean useAnalyze){
+        public Builder useAnalyze(boolean useAnalyze) {
             config.useAnalyze = useAnalyze;
             return this;
         }
 
-        public BlockBoxConfig build(){
+        public BlockBoxConfig build() {
             return config;
         }
     }
 
-    public interface IConfigChangeListener{
+    public interface IConfigChangeListener {
         void onConfigChange(BlockBoxConfig config);
     }
 }

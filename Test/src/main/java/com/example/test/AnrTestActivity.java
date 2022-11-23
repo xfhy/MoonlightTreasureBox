@@ -8,6 +8,7 @@ import android.view.View;
 
 public class AnrTestActivity extends AppCompatActivity {
     boolean sleep = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -15,7 +16,7 @@ public class AnrTestActivity extends AppCompatActivity {
         findViewById(R.id.tvTest).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!sleep){
+                if (!sleep) {
                     sleep = true;
                     SystemClock.sleep(10000);
                     sleep = false;

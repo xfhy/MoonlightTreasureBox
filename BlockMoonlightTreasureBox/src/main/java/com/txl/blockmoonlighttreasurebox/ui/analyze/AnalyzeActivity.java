@@ -13,7 +13,7 @@ import com.txl.blockmoonlighttreasurebox.ui.AnalyzeProtocol;
 
 /**
  * 分析每一个anr消息
- * */
+ */
 public class AnalyzeActivity extends Activity {
     private final AnalyzeSchedulingAdapter analyzeSchedulingAdapter = new AnalyzeSchedulingAdapter();
 
@@ -24,7 +24,7 @@ public class AnalyzeActivity extends Activity {
         initView();
     }
 
-    private void initView(){
+    private void initView() {
         RecyclerView recyclerMainThreadScheduling = findViewById(R.id.recyclerMainThreadScheduling);
         recyclerMainThreadScheduling.setAdapter(analyzeSchedulingAdapter);
         RecyclerView recyclerViewMessageQueue = findViewById(R.id.recyclerViewMessageQueue);

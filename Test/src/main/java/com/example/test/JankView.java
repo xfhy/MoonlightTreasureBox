@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 
 public class JankView extends androidx.appcompat.widget.AppCompatTextView {
     private boolean jank;
+
     public JankView(Context context) {
         super(context);
     }
@@ -27,17 +28,18 @@ public class JankView extends androidx.appcompat.widget.AppCompatTextView {
     public void draw(Canvas canvas) {
         super.draw(canvas);
         long start = SystemClock.elapsedRealtime();
-        if(jank){
+        if (jank) {
             SystemClock.sleep(500);
         }
         long end = SystemClock.elapsedRealtime();
-        Log.d("JankView","BlockMonitor start "+start + "  end "+end + "   "+(end - start));
+        Log.d("JankView", "BlockMonitor start " + start + "  end " + end + "   " + (end - start));
     }
 
     private int jankCount;
+
     public void setJank(boolean jank) {
         this.jank = jank;
-        setText("jankCount "+jankCount++);
+        setText("jankCount " + jankCount++);
         requestLayout();
     }
 }

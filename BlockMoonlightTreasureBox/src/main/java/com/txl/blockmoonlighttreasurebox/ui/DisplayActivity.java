@@ -28,6 +28,7 @@ public class DisplayActivity extends Activity {
     private final AtomicBoolean refresh = new AtomicBoolean(false);
     private final FileAdapter adapter = new FileAdapter();
     SwipeRefreshLayout swipeRefreshLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,8 +49,8 @@ public class DisplayActivity extends Activity {
         refreshAnrData();
     }
 
-    private void refreshAnrData(){
-        if(refresh.get()){
+    private void refreshAnrData() {
+        if (refresh.get()) {
             return;
         }
         refresh.set(true);
@@ -57,7 +58,8 @@ public class DisplayActivity extends Activity {
             @Override
             public void run() {
                 refresh.set(false);
-                List<AnrInfo> anrInfoList = FileSample.fileCache.restoreData();;
+                List<AnrInfo> anrInfoList = FileSample.fileCache.restoreData();
+                ;
                 Collections.sort(anrInfoList, new Comparator<AnrInfo>() {
                     @Override
                     public int compare(AnrInfo o1, AnrInfo o2) {
@@ -77,8 +79,8 @@ public class DisplayActivity extends Activity {
 
     }
 
-    private static class FileAdapter extends RecyclerView.Adapter<FileViewHolder>{
-        List<AnrInfo> anrInfoList ;
+    private static class FileAdapter extends RecyclerView.Adapter<FileViewHolder> {
+        List<AnrInfo> anrInfoList;
 
         public void setAnrInfoList(List<AnrInfo> anrInfoList) {
             this.anrInfoList = anrInfoList;
@@ -106,12 +108,13 @@ public class DisplayActivity extends Activity {
 
         @Override
         public int getItemCount() {
-            return anrInfoList==null?0:anrInfoList.size();
+            return anrInfoList == null ? 0 : anrInfoList.size();
         }
     }
 
-    private static class FileViewHolder extends RecyclerView.ViewHolder{
+    private static class FileViewHolder extends RecyclerView.ViewHolder {
         private final TextView textView;
+
         public FileViewHolder(@NonNull View itemView) {
             super(itemView);
             textView = itemView.findViewById(R.id.tvFileName);

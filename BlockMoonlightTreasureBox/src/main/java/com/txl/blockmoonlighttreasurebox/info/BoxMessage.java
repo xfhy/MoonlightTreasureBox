@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /**
  * 分发的Message  相关信息
- * */
+ */
 public class BoxMessage implements Serializable {
     public static final String SEPARATOR = "\r\n";
     private static final long serialVersionUID = 1L;
@@ -12,7 +12,7 @@ public class BoxMessage implements Serializable {
     private String handleName;
     /**
      * 内存地址
-     * */
+     */
     private String handlerAddress;
     private String callbackName;
     private int messageWhat;
@@ -45,7 +45,7 @@ public class BoxMessage implements Serializable {
     public BoxMessage() {
     }
 
-    public BoxMessage(String handleName, String callbackName, int messageWhat,String handlerAddress) {
+    public BoxMessage(String handleName, String callbackName, int messageWhat, String handlerAddress) {
         this.handleName = handleName;
         this.callbackName = callbackName;
         this.messageWhat = messageWhat;

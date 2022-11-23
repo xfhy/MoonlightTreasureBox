@@ -11,7 +11,7 @@ import android.content.pm.PackageManager;
 import com.txl.blockmoonlighttreasurebox.utils.AppExecutors;
 
 public class DisplayUtils {
-    public static void showAnalyzeActivityInLauncher(Context context, boolean show){
+    public static void showAnalyzeActivityInLauncher(Context context, boolean show) {
         ComponentName component = new ComponentName(context, DisplayActivity.class);
         PackageManager packageManager = context.getPackageManager();
         int newState = show ? COMPONENT_ENABLED_STATE_ENABLED : COMPONENT_ENABLED_STATE_DISABLED;

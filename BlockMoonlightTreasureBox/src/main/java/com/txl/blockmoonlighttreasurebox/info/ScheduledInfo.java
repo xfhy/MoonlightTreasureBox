@@ -15,7 +15,7 @@ public class ScheduledInfo implements Serializable {
     private String msgId;
     /**
      * 当前调度是否接收到了结束的信息，如果没有接收到说明主线程很久都没有处理对应的回调
-     * */
+     */
     private boolean start = true;
 
     public ScheduledInfo(long dealt, String msgId, boolean start) {

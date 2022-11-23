@@ -74,17 +74,17 @@ public class AppExecutors {
             mainThreadHandler.post(command);
         }
 
-        public void executeDelay(@NonNull Runnable command, long ms){
-            mainThreadHandler.postDelayed( command,ms );
+        public void executeDelay(@NonNull Runnable command, long ms) {
+            mainThreadHandler.postDelayed(command, ms);
         }
 
     }
 
-    public static AppExecutors getInstance(){
+    public static AppExecutors getInstance() {
         return AppExecutorsHolder.appExecutors;
     }
 
-    static class AppExecutorsHolder{
+    static class AppExecutorsHolder {
         static AppExecutors appExecutors = new AppExecutors();
     }
 }

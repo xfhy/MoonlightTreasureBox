@@ -69,11 +69,10 @@ extern "C" {
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wpadded"
-typedef struct
-{
+typedef struct {
 #ifndef __LP64__
-    unsigned long  d_ino;
-    unsigned long  d_off;
+    unsigned long d_ino;
+    unsigned long d_off;
     unsigned short d_reclen;
 #else
     ino64_t        d_ino;
@@ -81,16 +80,16 @@ typedef struct
     unsigned short d_reclen;
     unsigned char  d_type;
 #endif
-    char           d_name[1];
+    char d_name[1];
 } xcc_util_dirent_t;
 #pragma clang diagnostic pop
 
-#define XCC_UTIL_MAX(a,b) ({         \
+#define XCC_UTIL_MAX(a, b) ({         \
             __typeof__ (a) _a = (a); \
             __typeof__ (b) _b = (b); \
             _a > _b ? _a : _b; })
 
-#define XCC_UTIL_MIN(a,b) ({         \
+#define XCC_UTIL_MIN(a, b) ({         \
             __typeof__ (a) _a = (a); \
             __typeof__ (b) _b = (b); \
             _a < _b ? _a : _b; })
@@ -132,31 +131,47 @@ typedef struct
 #define XCC_UTIL_LIBART_DBG_SUSPEND      "_ZN3art3Dbg9SuspendVMEv"
 #define XCC_UTIL_LIBART_DBG_RESUME       "_ZN3art3Dbg8ResumeVMEv"
 
-typedef void  (*xcc_util_libc_set_abort_message_t)(const char* msg);
+typedef void  (*xcc_util_libc_set_abort_message_t)(const char *msg);
+
 typedef void  (*xcc_util_libart_runtime_dump_t)(void *runtime, void *ostream);
+
 typedef void *(*xcc_util_libart_thread_current_t)(void);
+
 typedef void  (*xcc_util_libart_thread_dump_t)(void *thread, void *ostream);
-typedef void  (*xcc_util_libart_thread_dump2_t)(void *thread, void *ostream, int check_suspended, int dump_locks);
+
+typedef void  (*xcc_util_libart_thread_dump2_t)(void *thread, void *ostream, int check_suspended,
+                                                int dump_locks);
+
 typedef void  (*xcc_util_libart_dbg_suspend_t)(void);
+
 typedef void  (*xcc_util_libart_dbg_resume_t)(void);
 
-const char* xcc_util_get_signame(const siginfo_t* si);
-const char* xcc_util_get_sigcodename(const siginfo_t* si);
-int xcc_util_signal_has_si_addr(const siginfo_t* si);
-int xcc_util_signal_has_sender(const siginfo_t* si, pid_t caller_pid);
+const char *xcc_util_get_signame(const siginfo_t *si);
+
+const char *xcc_util_get_sigcodename(const siginfo_t *si);
+
+int xcc_util_signal_has_si_addr(const siginfo_t *si);
+
+int xcc_util_signal_has_sender(const siginfo_t *si, pid_t caller_pid);
 
 char *xcc_util_trim(char *start);
+
 int xcc_util_atoi(const char *str, int *i);
 
 int xcc_util_write(int fd, const char *buf, size_t len);
+
 int xcc_util_write_str(int fd, const char *str);
+
 int xcc_util_write_format(int fd, const char *format, ...);
+
 int xcc_util_write_format_safe(int fd, const char *format, ...);
 
 char *xcc_util_gets(char *s, size_t size, int fd);
+
 int xcc_util_read_file_line(const char *path, char *buf, size_t len);
 
 void xcc_util_get_process_name(pid_t pid, char *buf, size_t len);
+
 void xcc_util_get_thread_name(pid_t tid, char *buf, size_t len);
 
 int xcc_util_record_sub_section_from(int log_fd, const char *path, const char *title, size_t limit);

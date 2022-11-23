@@ -10,12 +10,12 @@ import com.txl.blockmoonlighttreasurebox.sample.AbsSampler;
  * date：2021/10/23
  * description：
  */
-public interface ISamplerManager extends BlockBoxConfig.IConfigChangeListener, IMainThreadSampleListener{
+public interface ISamplerManager extends BlockBoxConfig.IConfigChangeListener, IMainThreadSampleListener {
     /**
-     * @param msgId current handle What's the news
+     * @param msgId    current handle What's the news
      * @param baseTime current msg base time
      *                 Not thread safe
-     * */
+     */
     void startAnrSample(String msgId, long baseTime);
 
     void start();
@@ -24,7 +24,7 @@ public interface ISamplerManager extends BlockBoxConfig.IConfigChangeListener, I
 
     /**
      * 采集其它的一些信息
-     * */
+     */
     void addSample(AbsSampler sampler);
 
 }
