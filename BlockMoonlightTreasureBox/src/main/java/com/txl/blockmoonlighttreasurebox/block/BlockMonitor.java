@@ -128,12 +128,17 @@ class BlockMonitor implements Printer, IBlock, ISystemAnrObserver {
     }
 
     private void msgStart(String msg) {
+        //elapsedRealtime 当前时刻与开机时刻的差值，它包含了深度睡眠时间。
         tempStartTime = SystemClock.elapsedRealtime();
+        //目标超时时间，当前时间+超时时间
         monitorAnrTime = tempStartTime + config.getAnrTime();
+        //通过Looper的msg开始日志分析一波，生成自己的BoxMessage分析对象，对于分析该消息是来自哪里以及在干什么，有一定的帮助
         currentMsg = BoxMessageUtils.parseLooperStart(msg);
         currentMsg.setMsgId(monitorMsgId);
+        //cpu的开始执行时间
         cpuTempStartTime = SystemClock.currentThreadTimeMillis();
-        //两次消息时间差较大，单独处理消息且增加一个gap消息 不应该存在两个连续的gap消息
+
+        //两次消息时间差较大，单独处理消息且增加一个gap消息（表示刚刚的时候，主线程处于IDLE状态） 不应该存在两个连续的gap消息
         if (tempStartTime - lastEnd > config.getGapTime() && lastEnd != noInit) {
             if (messageInfo != null) {
                 handleMsg();
@@ -246,6 +251,7 @@ class BlockMonitor implements Printer, IBlock, ISystemAnrObserver {
     }
 
     private void handleMsg() {
+        //生成一个历史消息调度：MessageInfo，该MessageInfo里面记录着wallTime,cpuTime，消息类型，消息id等，通过接口回调给出结果
         if (messageInfo != null) {
             MessageInfo temp = messageInfo;
             messageInfo = null;
@@ -254,6 +260,7 @@ class BlockMonitor implements Printer, IBlock, ISystemAnrObserver {
                 msgId = temp.boxMessages.get(0).getMsgId();
             }
             Log.d(TAG, "add msg wallTime other wallTime : " + temp.wallTime + "  cpuTime " + temp.cpuTime + "   MSG_TYPE : " + MessageInfo.msgTypeToString(temp.msgType) + "  msgId " + msgId);
+            //将生成的MessageInfo回调出去
             samplerManager.onMsgSample(SystemClock.elapsedRealtimeNanos(), monitorMsgId + "", temp);
         }
         messageInfo = null;
