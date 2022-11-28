@@ -140,16 +140,23 @@ class BlockMonitor implements Printer, IBlock, ISystemAnrObserver {
 
         //两次消息时间差较大，单独处理消息且增加一个gap消息（表示刚刚的时候，主线程处于IDLE状态） 不应该存在两个连续的gap消息
         if (tempStartTime - lastEnd > config.getGapTime() && lastEnd != noInit) {
+            //先把之前的聚合消息搞成一个消息，然后将该消息回调出去，然后将messageInfo置空
             if (messageInfo != null) {
                 handleMsg();
             }
+            //生成一个gap消息，代表idle
             messageInfo = new MessageInfo();
             messageInfo.msgType = MessageInfo.MSG_TYPE_GAP;
+            //时间流过多少，耗时
             messageInfo.wallTime = tempStartTime - lastEnd;
+            //cpu真正在该线程执行了多长时间
             messageInfo.cpuTime = cpuTempStartTime - lastCpuEnd;
             startTime = tempStartTime;
+            //将生成的gap消息，回调出去
             handleMsg();
         }
+
+        //开始新的聚合消息的起步
         if (messageInfo == null) {
             messageInfo = new MessageInfo();
             startTime = SystemClock.elapsedRealtime();
@@ -165,20 +172,27 @@ class BlockMonitor implements Printer, IBlock, ISystemAnrObserver {
             lastCpuEnd = SystemClock.currentThreadTimeMillis();
             long dealt = lastEnd - tempStartTime;
             handleJank(dealt);
+            //android.app.ActivityThread$H 的消息
             boolean msgActivityThread = BoxMessageUtils.isBoxMessageActivityThread(currentMsg);
-            if (messageInfo == null) {//在这个位置为空 现阶段的逻辑只有 anr 采集时将原来的 messageInfo 置空了
+            //在这个位置为空 现阶段的逻辑只有 anr 采集时将原来的 messageInfo 置空了
+            if (messageInfo == null) {
                 messageInfo = new MessageInfo();
             }
+            //dealt表示该消息的总时长，但并不是cpu time，而是wall time
             if (dealt > config.getWarnTime() || msgActivityThread) {
-                if (messageInfo.count > 1) {//先处理原来的信息
+                //先聚合处理原来的信息
+                if (messageInfo.count > 1) {
                     messageInfo.msgType = MessageInfo.MSG_TYPE_INFO;
                     handleMsg();
                 }
+
+                //将这次的长耗时消息 or ActivityThread#H的消息  单独记录，方便分析
                 messageInfo = new MessageInfo();
                 messageInfo.wallTime = lastEnd - tempStartTime;
                 messageInfo.cpuTime = lastCpuEnd - cpuTempStartTime;
                 messageInfo.boxMessages.add(currentMsg);
                 messageInfo.msgType = MessageInfo.MSG_TYPE_WARN;
+                //这儿监控ANR不合适，应该用SIGNAL信号监听方式
                 boolean anr = dealt > config.getAnrTime();
                 if (anr) {
                     messageInfo.msgType = MessageInfo.MSG_TYPE_ANR;
@@ -191,6 +205,7 @@ class BlockMonitor implements Printer, IBlock, ISystemAnrObserver {
                     samplerManager.messageQueueDispatchAnrFinish();
                 }
             } else {
+                //到这里来的消息，表示它既不是长耗时消息，也不是ActivityThread#H的消息，这些消息会被聚合
                 //统计每一次消息分发耗时 他们的叠加就是总耗时
                 messageInfo.wallTime += lastEnd - startTime;
                 //生成消息的时候，当前线程总的执行时间
@@ -207,9 +222,11 @@ class BlockMonitor implements Printer, IBlock, ISystemAnrObserver {
 
     private void handleJank(long dealt) {
 
+        //currentMsg是否在更新UI
         if (BoxMessageUtils.isBoxMessageDoFrame(currentMsg) && dealt > mFrameIntervalNanos * config.getJankFrame()) {
             MessageInfo temp = messageInfo;
             messageInfo = new MessageInfo();
+            //掉帧了
             messageInfo.msgType = MessageInfo.MSG_TYPE_JANK;
             messageInfo.boxMessages.add(currentMsg);
             messageInfo.wallTime = lastEnd - tempStartTime;
